@@ -28,10 +28,14 @@ public class SignUp extends AppCompatActivity implements  View.OnClickListener{
     private Button btnGetAllData;
     private String allKickBoxers;
 
+    private Button btnTransition;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        btnTransition = findViewById(R.id.btnNextActivity);
 
         btnSave = findViewById(R.id.btnSave);
         edtName = findViewById(R.id.edtName);
@@ -45,24 +49,24 @@ public class SignUp extends AppCompatActivity implements  View.OnClickListener{
         btnSave.setOnClickListener(SignUp.this);
 
 
-        //  txtGetData.setOnClickListener(new View.OnClickListener() {
-            //   @Override
-            //   public void onClick(View v) {
+           txtGetData.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
 
-                //      ParseQuery <ParseObject>  parseQuery = ParseQuery.getQuery("KickBoxer");
-                //      parseQuery.getInBackground("v3aKjRXtDS", new GetCallback<ParseObject>() {
-                    //         @Override
-                    //         public void done(ParseObject object, ParseException e) {
+                     ParseQuery <ParseObject>  parseQuery = ParseQuery.getQuery("KickBoxer");
+                      parseQuery.getInBackground("v3aKjRXtDS", new GetCallback<ParseObject>() {
+                             @Override
+                             public void done(ParseObject object, ParseException e) {
 
-                        //           if (object!=null && e==null){
+                                   if (object!=null && e==null){
 
-                         //   txtGetData.setText(object.get("name") + "-" + "Punch Power" + object.get("punch_power"));
-                            //            }
-                        //        }
-                    //         });
+                            txtGetData.setText(object.get("name") + "-" + "Punch Power" + object.get("punch_power"));
+                                        }
+                              }
+                             });
 
-        //    }
-      //  });
+            }
+       });
 
         btnGetAllData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +74,10 @@ public class SignUp extends AppCompatActivity implements  View.OnClickListener{
 
                 allKickBoxers = "";
                 ParseQuery<ParseObject> queryAll = ParseQuery.getQuery("KickBoxer");
+                queryAll.whereGreaterThan("kick_power" , 3000);
+                queryAll.whereGreaterThanOrEqualTo("punch_power" , 7000);
+                queryAll.setLimit(1);
+
                 queryAll.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
@@ -80,15 +88,12 @@ public class SignUp extends AppCompatActivity implements  View.OnClickListener{
 
                                 for (ParseObject kickBoxer : objects){
 
-                                    allKickBoxers = allKickBoxers + kickBoxer.get("name") + "-" + "Kickpower:" + kickBoxer.get("kick_power") + "-" +
-                                            "kickspeed:" + kickBoxer.get("kick_speed") + "-" +
-                                            "punch power:" + kickBoxer.get("punch_power") + "-" +
-                                            "punch speed" + kickBoxer.get("punch_speed") + "-";
+                                    allKickBoxers = allKickBoxers + kickBoxer.get("name") + "-";
                                 }
 
-                             //   FancyToast.makeText(SignUp.this, allKickBoxers, FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
+                              FancyToast.makeText(SignUp.this, allKickBoxers, FancyToast.LENGTH_LONG, FancyToast.SUCCESS,false).show();
 
-                                btnGetAllData.setText(allKickBoxers + "");
+                              //  btnGetAllData.setText(allKickBoxers + "");
 
                             }else{
 
@@ -104,9 +109,13 @@ public class SignUp extends AppCompatActivity implements  View.OnClickListener{
             }
         });
 
+        btnTransition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
-
+            }
+        });
     }
 
 
